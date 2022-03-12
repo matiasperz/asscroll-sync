@@ -1,0 +1,26 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.square {
+  width: 45vw;
+  height: 45vw;
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+body,
+html {
+  margin: 0;
+  background-color: black;
+}
+
+canvas {
+  height: 100vh;
+  width: 100vw;
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
