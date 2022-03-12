@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   WebGLRenderer,
   Scene,
@@ -44,12 +44,11 @@ const initThreeJS = (asscroll) => {
   );
   camera.position.set(0, 0, cameraPosition);
 
-  const geometry = new PlaneGeometry();
+  const planeSize = window.innerWidth * 0.45;
+  const geometry = new PlaneGeometry(planeSize, planeSize);
   const material = new MeshBasicMaterial({
     color: "red"
   });
-
-  const planeSize = window.innerWidth * 0.45;
   
   const planes = []
 
@@ -68,7 +67,7 @@ const initThreeJS = (asscroll) => {
 
   const render = function () {
     camera.position.y = -asscroll.scroll.current.currentPos;
-    const scale = (-asscroll.delta * 4000) + planeSize
+    const scale = 1 - (asscroll.delta * 10)
 
     planes.forEach((p) => {
       p.scale.set(scale, scale, 1)
@@ -110,11 +109,32 @@ const ThreeSquares = () => {
   return <></>
 }
 
+const HTMLSquares = () => {
+  const ref = useRef(null);
+  const [asscroll, isReady] = useASScroll();
+
+  useEffect(() => {
+    if(!isReady || !ref) return
+    
+    gsap.ticker.add(() => {
+      gsap.set(ref.current, {
+        scale: 1 - (asscroll.delta * 10)
+      })
+    })
+  }, [isReady])
+
+  return (
+    
+      <div className="square" ref={ref} />
+    
+  )
+}
+
 export default function App() {
   return (
     <Layout>
       {[...Array(squaresAmount).keys()].map((key) => (
-        <div className="square" key={key} />
+        <HTMLSquares key={key} />
       ))}
       <ThreeSquares />
     </Layout>
