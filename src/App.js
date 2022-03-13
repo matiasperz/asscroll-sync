@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from "react";
+import { Canvas as R3FCanvas, useFrame } from '@react-three/fiber'
+import { Plane, Box, OrbitControls, useContextBridge } from '@react-three/drei'
 import {
   WebGLRenderer,
   Scene,
@@ -7,15 +9,19 @@ import {
   MeshBasicMaterial,
   Mesh
 } from "three";
+import tunnel from 'tunnel-rat'
 
 import ASScroll from "@ashthornton/asscroll";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 import "./styles.css";
-import { ASSCrollProvider, useASScroll } from "./ASScrollContext";
+import { ASSCrollProvider, useASScroll, context as ASScrollContext } from "./ASScrollContext";
+import Scroll from './Scroll'
 
 const squaresAmount = 10;
+
+const webgl = tunnel()
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,10 +85,11 @@ const initThreeJS = (asscroll) => {
   gsap.ticker.add(render);
 };
 
-const Layout = ({ children }) => {
+const Layout = ({ children, fixed }) => {
   return (
     <ASSCrollProvider>
-      <div style={{ position: "relative", zIndex: 10 }}>
+      {fixed}
+      <div style={{ position: "relative" }}>
         <div data-asscroll-container>
           <div data-asscroll>{children}</div>
         </div>
@@ -96,25 +103,40 @@ const Layout = ({ children }) => {
   );
 };
 
-const ThreeSquares = () => {
+const margin = 20;
+const planeSize = window.innerWidth * 0.45;
+const geometry = new PlaneGeometry(planeSize, planeSize);
+const material = new MeshBasicMaterial({
+  color: "red"
+});
+
+const ThreeSquare = ({ idx }) => {
   const [asscroll, isReady] = useASScroll();
+  const meshRef = useRef(null);
 
   useEffect(() => {
-    if(!isReady) return
-    
-    initThreeJS(asscroll)
+    const plane = meshRef.current
 
-  }, [isReady])
+    let planeOrigY =
+      -planeSize / 2 - planeSize * idx - margin * idx + window.innerHeight / 2;
+    plane.position.y = planeOrigY;
+    plane.position.x = -planeSize / 2 + window.innerWidth / 2;
+  }, [])
 
-  return <></>
+  useFrame(() => {
+    const scale = 1 - (asscroll.delta * 10)
+    meshRef.current.scale.set(scale, scale, 1)
+  })
+
+  return <mesh geometry={geometry} material={material} ref={meshRef} />
 }
 
-const HTMLSquares = () => {
+const HTMLSquare = () => {
   const ref = useRef(null);
   const [asscroll, isReady] = useASScroll();
 
   useEffect(() => {
-    if(!isReady || !ref) return
+    if(!isReady || !ref.current) return
     
     gsap.ticker.add(() => {
       gsap.set(ref.current, {
@@ -128,13 +150,39 @@ const HTMLSquares = () => {
   )
 }
 
+const cameraPosition = 800;
+const cameraFov = (180 * (2 * Math.atan(window.innerHeight / 2 / cameraPosition))) / Math.PI;
+
+const Canvas = () => {
+  const ContextBridge = useContextBridge(ASScrollContext)
+
+  return (
+    <div className="canvas-wrapper">
+      <R3FCanvas camera={{position: [0, 0, cameraPosition], fov: cameraFov}}>
+        <color attach="background" args={["#000"]} />
+        <OrbitControls />
+        <ContextBridge>
+          <Scroll>
+            {[...Array(squaresAmount).keys()].map((key) => (
+              <ThreeSquare idx={key} key={key} />
+            ))}
+          </Scroll>
+        </ContextBridge>
+      </R3FCanvas>
+    </div>
+  )
+}
+
 export default function App() {
   return (
-    <Layout>
-      {[...Array(squaresAmount).keys()].map((key) => (
-        <HTMLSquares key={key} />
-      ))}
-      <ThreeSquares />
-    </Layout>
+    <>
+      <Layout fixed={
+        <Canvas />
+      }>
+        {[...Array(squaresAmount).keys()].map((key) => (
+          <HTMLSquare key={key} />
+        ))}
+      </Layout>
+    </>
   );
 }

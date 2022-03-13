@@ -6,7 +6,7 @@ import * as THREE from "three";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
-const context = createContext({});
+export const context = createContext({});
 
 export const useASScroll = () => {
   return useContext(context);
