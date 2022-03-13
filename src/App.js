@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Canvas as R3FCanvas } from '@react-three/fiber'
-import { OrbitControls, useContextBridge } from '@react-three/drei'
+import { useContextBridge } from '@react-three/drei'
 import {
   WebGLRenderer,
   Scene,
@@ -19,6 +19,7 @@ import "./styles.css";
 import { ASSCrollProvider, useASScroll, context as ASScrollContext } from "./ASScrollContext";
 import Scroll from './Scroll'
 import { useGsapFrame } from "./useGsapFrame";
+import { range } from "./utils";
 
 const squaresAmount = 10;
 
@@ -167,7 +168,6 @@ const Canvas = () => {
         })
       }} frameloop="never" camera={{ position: [0, 0, cameraPosition], fov: cameraFov }}>
         <color attach="background" args={["#000"]} />
-        <OrbitControls />
         <ContextBridge>
           <Scroll>
             <WebGLOut />
@@ -182,12 +182,14 @@ export default function App() {
   return (
     <>
       <Layout>
-        <WebGL>
-          {[...Array(squaresAmount).keys()].map((key) => (
+        <WebGL> {/* WebGL tunnel Rat 🐀 */}
+          {range(squaresAmount).map((key) => (
             <ThreeSquare idx={key} key={key} />
           ))}
         </WebGL>
-        {[...Array(squaresAmount).keys()].map((key) => (
+
+        {/* Just simple HTML */}
+        {range(squaresAmount).map((key) => (
           <HTMLSquare key={key} />
         ))}
       </Layout>

@@ -1,0 +1,1 @@
+export const range = (target) => [...Array(target).keys()]
