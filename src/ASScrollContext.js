@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useGsapFrame } from './useGsapFrame';
 
 export const context = createContext({});
 
@@ -67,19 +68,18 @@ export const ASSCrollProvider = ({ children }) => {
 
   let last = 0
 
-  useEffect(() => {
+  useGsapFrame((time, deltaTime, frame) => {
+    if (!asscrollInstance.current) return
+
     const _state = state.current;
-    THREE.MathUtils.damp(_state.delta, Math.abs());
 
-    gsap.ticker.add((time, deltaTime, frame) => {
-      const asscroll = asscrollInstance.current;
-      const deltaMs = deltaTime / 1000
-      const scrollProgress = asscroll.currentPos / asscroll.maxScroll;
+    const asscroll = asscrollInstance.current;
+    const deltaMs = deltaTime / 1000
+    const scrollProgress = asscroll.currentPos / asscroll.maxScroll;
 
-      _state.offset = THREE.MathUtils.damp((last = _state.offset), scrollProgress, DAMPING, deltaMs)
-      _state.delta = THREE.MathUtils.damp(_state.delta, Math.abs(last - _state.offset), DAMPING, deltaMs)
-    });
-  }, []);
+    _state.offset = THREE.MathUtils.damp((last = _state.offset), scrollProgress, DAMPING, deltaMs)
+    _state.delta = THREE.MathUtils.damp(_state.delta, Math.abs(last - _state.offset), DAMPING, deltaMs)
+  })
 
   return (
     <context.Provider value={[state.current, isReady]}>{children}</context.Provider>
