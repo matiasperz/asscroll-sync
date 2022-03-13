@@ -124,9 +124,7 @@ const HTMLSquares = () => {
   }, [isReady])
 
   return (
-    
-      <div className="square" ref={ref} />
-    
+    <div className="square" ref={ref} />
   )
 }
 

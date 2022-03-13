@@ -20,7 +20,6 @@ export const ASSCrollProvider = ({ children }) => {
   const state = useRef({
     delta: 0,
     offset: 0,
-    currentPos: 0,
     scroll: asscrollInstance
   });
 
@@ -31,7 +30,6 @@ export const ASSCrollProvider = ({ children }) => {
 
     asscrollInstance.current = new ASScroll({
       disableRaf: true,
-      disableResize: false,
       ease: 0.125,
       containerElement: targetElm
     });
