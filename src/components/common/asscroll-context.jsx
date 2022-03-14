@@ -38,6 +38,7 @@ export const ASSCrollProvider = ({ children }) => {
 
     state.current.scroll = new ASScroll({
       disableRaf: true,
+      disableResize: true,
       ease: 0.125,
       containerElement: targetElm
     })
