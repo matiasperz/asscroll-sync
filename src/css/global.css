@@ -46,6 +46,24 @@ body:not(.user-is-tabbing) textarea:focus {
   margin-bottom: 20px;
 }
 
+.spacer {
+  width: 45vw;
+  height: 45vw;
+  background-color: green;
+  margin-bottom: 20px;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vw;
+  color: white;
+  cursor: pointer;
+}
+
+.spacer.open {
+  height: 55vw;
+}
+
 .canvas-wrapper {
   position: fixed;
   z-index: -1;

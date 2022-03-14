@@ -24,8 +24,8 @@ export const PageLayout = ({ children, contain }: Props) => {
       {/* <Header /> */}
       <Canvas />
       <div style={{ position: 'relative' }}>
-        <div data-asscroll-container>
-          <div data-asscroll>
+        <div asscroll-container="true">
+          <div>
             <main>
               {contain ? (
                 <Container {...contain}>{children}</Container>

@@ -19,32 +19,38 @@ export const useASScroll = () => {
 
 const DAMPING = 20
 
+gsap.registerPlugin(ScrollTrigger)
+
 export const ASSCrollProvider = ({ children }) => {
   const [isReady, setIsReady] = useState(false)
-  const asscrollInstance = useRef(null)
   const state = useRef({
     delta: 0,
     offset: 0,
-    scroll: asscrollInstance
+    scroll: null
   })
 
   useEffect(() => {
-    const targetElm = document.querySelector('[data-asscroll-container]')
+    const targetElm = document.querySelector('[asscroll-container]')
 
     if (!targetElm) return
 
     const ASScroll = require('@ashthornton/asscroll')
 
-    asscrollInstance.current = new ASScroll({
+    state.current.scroll = new ASScroll({
       disableRaf: true,
       ease: 0.125,
       containerElement: targetElm
     })
 
-    const asscroll = asscrollInstance.current
+    const asscroll = state.current.scroll
 
+    /* Setup resize observer */
+    new ResizeObserver(asscroll.resize).observe(targetElm.children[0])
+
+    /* Add scroll update to gsap ticker */
     gsap.ticker.add(asscroll.update)
 
+    /* Scroll trigger setup */
     ScrollTrigger.defaults({
       scroller: asscroll.containerElement
     })
@@ -70,16 +76,20 @@ export const ASSCrollProvider = ({ children }) => {
 
     asscroll.enable()
     setIsReady(true)
+
+    return () => {
+      gsap.ticker.remove(asscroll.update)
+    }
   }, [])
 
   let last = 0
 
   useGsapFrame((time, deltaTime) => {
-    if (!asscrollInstance.current) return
+    if (!state.current.scroll) return
 
     const _state = state.current
 
-    const asscroll = asscrollInstance.current
+    const asscroll = _state.scroll
     const deltaMs = deltaTime / 1000
     const scrollProgress = asscroll.currentPos / asscroll.maxScroll
 

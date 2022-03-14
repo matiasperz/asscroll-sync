@@ -8,7 +8,7 @@ const Scroll = ({ children }) => {
   const groupRef = useRef()
 
   useGsapFrame(() => {
-    groupRef.current.position.y = asscroll.scroll.current.currentPos
+    groupRef.current.position.y = asscroll.scroll.currentPos
   })
 
   return <group ref={groupRef}>{children}</group>

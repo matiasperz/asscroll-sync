@@ -1,18 +1,14 @@
+import clsx from 'clsx'
 import { useASScroll } from 'components/common/asscroll-context'
 import { WebGL } from 'components/common/webgl'
 import gsap from 'gsap'
-import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import { useGsapFrame } from 'hooks/use-gsap-frame'
 import { range } from 'lib/utils'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { MeshBasicMaterial, PlaneGeometry } from 'three'
 
 import { Meta } from '~/components/common/meta'
 import { PageLayout } from '~/components/layout/page'
-
-const squaresAmount = 10
-
-gsap.registerPlugin(ScrollTrigger)
 
 const ThreeSquare = ({ idx }) => {
   const [asscroll] = useASScroll()
@@ -68,6 +64,21 @@ const HTMLSquare = () => {
   return <div className="square" ref={ref} />
 }
 
+const Spacer = () => {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div
+      className={clsx('spacer', { open: open })}
+      onClick={() => {
+        setOpen((state) => !state)
+      }}
+    >
+      <p>CLICK ME!</p>
+    </div>
+  )
+}
+
 const HomePage = () => {
   return (
     <PageLayout>
@@ -76,13 +87,17 @@ const HomePage = () => {
       <WebGL>
         {' '}
         {/* WebGL tunnel Rat 🐀 */}
-        {range(squaresAmount).map((key) => (
+        {range(11).map((key) => (
           <ThreeSquare idx={key} key={key} />
         ))}
       </WebGL>
 
       {/* Just simple HTML */}
-      {range(squaresAmount).map((key) => (
+      {range(5).map((key) => (
+        <HTMLSquare key={key} />
+      ))}
+      <Spacer />
+      {range(5).map((key) => (
         <HTMLSquare key={key} />
       ))}
     </PageLayout>
