@@ -1,18 +1,31 @@
 import { useContextBridge } from '@react-three/drei'
 import { Canvas as R3FCanvas } from '@react-three/fiber'
 import gsap from 'gsap'
+import { useEffect, useRef } from 'react'
 import Stats from 'three/examples/jsm/libs/stats.module'
+
+import { useViewportSize } from '~/hooks/use-viewport'
 
 import { context as ASScrollContext } from './asscroll-context'
 import Scroll from './scroll'
 import { WebGLOut } from './webgl'
 
-const cameraPosition = 800
-const cameraFov =
-  (180 * (2 * Math.atan(window.innerHeight / 2 / cameraPosition))) / Math.PI
+const CAMERA_DISTANCE = 800
+const calcCameraFov = () =>
+  (180 * (2 * Math.atan(window.innerHeight / 2 / CAMERA_DISTANCE))) / Math.PI
 
 export const Canvas = () => {
   const ContextBridge = useContextBridge(ASScrollContext)
+  const { width, height } = useViewportSize()
+  const camera = useRef(null)
+
+  useEffect(() => {
+    if (!camera.current || !height || !width) return
+
+    camera.current.fov = calcCameraFov()
+
+    camera.current.updateProjectionMatrix()
+  }, [width, height])
 
   return (
     <div className="canvas-wrapper">
@@ -21,13 +34,15 @@ export const Canvas = () => {
           const stats = new Stats()
           document.body.appendChild(stats.dom)
 
+          camera.current = state.camera
+
           gsap.ticker.add(() => {
             state.gl.render(state.scene, state.camera)
             stats.update()
           })
         }}
         frameloop="never"
-        camera={{ position: [0, 0, cameraPosition], fov: cameraFov }}
+        camera={{ position: [0, 0, CAMERA_DISTANCE], fov: calcCameraFov() }}
       >
         <color attach="background" args={['#000']} />
         <ContextBridge>

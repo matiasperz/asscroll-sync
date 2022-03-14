@@ -1,9 +1,9 @@
-import { useThree } from '@react-three/fiber'
 import clsx from 'clsx'
 import { useASScroll } from 'components/common/asscroll-context'
 import { WebGL } from 'components/common/webgl'
 import gsap from 'gsap'
 import { useGsapFrame } from 'hooks/use-gsap-frame'
+import { useViewportSize } from 'hooks/use-viewport'
 import { range } from 'lib/utils'
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -12,7 +12,7 @@ import { PageLayout } from '~/components/layout/page'
 
 export const ThreeSquare = memo(({ idx }) => {
   const [asscroll] = useASScroll()
-  const { viewport } = useThree()
+  const viewport = useViewportSize()
   const meshRef = useRef(null)
 
   const { planeSize, margin } = useMemo(() => {
@@ -34,15 +34,12 @@ export const ThreeSquare = memo(({ idx }) => {
     <mesh
       position={[
         -planeSize / 2 + viewport.width / 2,
-        -planeSize / 2 -
-          viewport.width * 0.45 * idx -
-          margin * idx +
-          viewport.height / 2,
+        -planeSize / 2 - planeSize * idx - margin * idx + viewport.height / 2,
         0
       ]}
       ref={meshRef}
     >
-      <planeGeometry args={[viewport.width * 0.45, viewport.width * 0.45]} />
+      <planeGeometry args={[planeSize, planeSize]} />
       <meshBasicMaterial color="red" />
     </mesh>
   )

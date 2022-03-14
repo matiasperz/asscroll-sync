@@ -16,7 +16,11 @@
     "tsc": "tsc --pretty --noEmit"
   },
   "dependencies": {
+    "@ashthornton/asscroll": "2.0.4",
+    "@react-three/drei": "8.16.4",
+    "@react-three/fiber": "7.0.26",
     "clsx": "1.1.1",
+    "gsap": "3.9.1",
     "hls.js": "1.1.5",
     "mousetrap": "1.6.5",
     "next": "12.1.0",
@@ -25,10 +29,7 @@
     "react-device-detect": "2.1.2",
     "react-dom": "17.0.2",
     "react-merge-refs": "1.1.0",
-    "@ashthornton/asscroll": "2.0.4",
-    "@react-three/drei": "8.16.4",
-    "@react-three/fiber": "7.0.26",
-    "gsap": "3.9.1",
+    "react-use-measure": "^2.1.1",
     "three": "0.138.3",
     "tunnel-rat": "^0.0.2"
   },
