@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react'
 import gsap from 'gsap'
+import { useLayoutEffect, useRef } from 'react'
 
 export const useGsapFrame = (callback) => {
   const ref = useRef(callback)
