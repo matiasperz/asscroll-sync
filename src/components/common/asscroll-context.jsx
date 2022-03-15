@@ -46,7 +46,10 @@ export const ASSCrollProvider = ({ children }) => {
     const asscroll = state.current.scroll
 
     /* Setup resize observer */
-    new ResizeObserver(asscroll.resize).observe(targetElm.children[0])
+    new ResizeObserver(() => {
+      asscroll.resize()
+      ScrollTrigger.refresh()
+    }).observe(targetElm.children[0])
 
     /* Add scroll update to gsap ticker */
     gsap.ticker.add(asscroll.update)
