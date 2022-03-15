@@ -77,6 +77,39 @@ const Spacer = () => {
   )
 }
 
+const Trigger = () => {
+  const overpageRef = useRef(null)
+  const [, isReady] = useASScroll()
+
+  useEffect(() => {
+    if (!overpageRef.current || !isReady) return
+
+    const tween = gsap.to(overpageRef.current, {
+      scrollTrigger: {
+        trigger: overpageRef.current.parentElement,
+        scrub: true,
+        start: 'top 50%',
+        end: 'bottom 85%'
+      },
+      width: '100%',
+      //duration: 5,
+      ease: 'linear'
+    })
+
+    return () => {
+      tween.kill()
+    }
+  }, [isReady])
+
+  return (
+    <div className="overpage-trigger">
+      <div className="overpage" ref={overpageRef}>
+        <h1>With scroll trigger 🔥</h1>
+      </div>
+    </div>
+  )
+}
+
 const HomePage = () => {
   return (
     <PageLayout>
@@ -90,11 +123,15 @@ const HomePage = () => {
       </WebGL>
 
       {/* Just simple HTML */}
-      {range(5).map((key) => (
+      {range(2).map((key) => (
         <HTMLSquare key={key} />
       ))}
       <Spacer />
-      {range(5).map((key) => (
+      {range(2).map((key) => (
+        <HTMLSquare key={key} />
+      ))}
+      <Trigger />
+      {range(2).map((key) => (
         <HTMLSquare key={key} />
       ))}
     </PageLayout>

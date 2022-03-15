@@ -26,7 +26,7 @@ export const PageLayout = ({ children, contain }: Props) => {
       <div style={{ position: 'relative' }}>
         <div asscroll-container="true">
           <div>
-            <main>
+            <main style={{ position: 'relative' }}>
               {contain ? (
                 <Container {...contain}>{children}</Container>
               ) : (
