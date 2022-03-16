@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useASScroll } from 'components/common/asscroll-context'
 import { WebGL } from 'components/common/webgl'
 import gsap from 'gsap'
+import { useDeviceDetect } from 'hooks/use-device-detect'
 import { useGsapFrame } from 'hooks/use-gsap-frame'
 import { useViewportSize } from 'hooks/use-viewport'
 import { range } from 'lib/utils'
@@ -78,18 +79,21 @@ const Spacer = () => {
 }
 
 const Trigger = () => {
+  const { isDesktop } = useDeviceDetect()
   const overpageRef = useRef(null)
   const [, isReady] = useASScroll()
 
   useEffect(() => {
-    if (!overpageRef.current || !isReady) return
+    if (!overpageRef.current || !isReady || isDesktop === undefined) return
 
     const tween = gsap.to(overpageRef.current, {
       scrollTrigger: {
         trigger: overpageRef.current.parentElement,
         scrub: true,
-        start: 'top 50%',
-        end: 'bottom 85%'
+        ...(isDesktop
+          ? { start: 'top 50%', end: 'bottom 85%' }
+          : { start: 'top 50%', end: 'bottom 50%' }),
+        markers: true
       },
       width: '100%',
       //duration: 5,
@@ -99,7 +103,7 @@ const Trigger = () => {
     return () => {
       tween.kill()
     }
-  }, [isReady])
+  }, [isReady, isDesktop])
 
   return (
     <div className="overpage-trigger">
@@ -131,6 +135,12 @@ const HomePage = () => {
         <HTMLSquare key={key} />
       ))}
       <Trigger />
+      {range(2).map((key) => (
+        <HTMLSquare key={key} />
+      ))}
+      <div className="square parallax" data-speed="0.1">
+        Parallax
+      </div>
       {range(2).map((key) => (
         <HTMLSquare key={key} />
       ))}

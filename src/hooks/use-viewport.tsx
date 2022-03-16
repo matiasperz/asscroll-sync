@@ -9,7 +9,7 @@ export const useViewportSize = () => {
     height: number | undefined
   }>({
     width: 0,
-    height: undefined
+    height: 0
   })
 
   useEffect(() => {

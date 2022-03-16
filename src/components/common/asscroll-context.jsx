@@ -9,6 +9,9 @@ import React, {
 } from 'react'
 import * as THREE from 'three'
 
+import { useViewportSize } from '~/hooks/use-viewport'
+import { htmlParallax } from '~/lib/gsap'
+
 import { useGsapFrame } from '../../hooks/use-gsap-frame'
 
 export const context = createContext([])
@@ -22,6 +25,7 @@ const DAMPING = 20
 gsap.registerPlugin(ScrollTrigger)
 
 export const ASSCrollProvider = ({ children }) => {
+  const viewport = useViewportSize()
   const [isReady, setIsReady] = useState(false)
   const state = useRef({
     delta: 0,
@@ -31,6 +35,14 @@ export const ASSCrollProvider = ({ children }) => {
 
   useEffect(() => {
     const targetElm = document.querySelector('[asscroll-container]')
+    const enableAsscroll = (asscroll) => {
+      const scrollElements = targetElm.querySelectorAll(
+        '.gsap-marker-start, .gsap-marker-end, [asscroll]'
+      )
+
+      asscroll.disable()
+      asscroll.enable({ newScrollElements: scrollElements })
+    }
 
     if (!targetElm) return
 
@@ -46,10 +58,17 @@ export const ASSCrollProvider = ({ children }) => {
     const asscroll = state.current.scroll
 
     /* Setup resize observer */
-    new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       asscroll.resize()
       ScrollTrigger.refresh()
-    }).observe(targetElm.children[0])
+    })
+    resizeObserver.observe(targetElm.children[0])
+
+    /* Setup children mutation observer to fix gsap scroll-trigger markers issue */
+    const mutationObserver = new MutationObserver(() =>
+      enableAsscroll(asscroll)
+    )
+    mutationObserver.observe(targetElm, { childList: true })
 
     /* Add scroll update to gsap ticker */
     gsap.ticker.add(asscroll.update)
@@ -72,19 +91,42 @@ export const ASSCrollProvider = ({ children }) => {
           width: window.innerWidth,
           height: window.innerHeight
         }
-      }
+      },
+      fixedMarkers: true
     })
 
     asscroll.on('update', ScrollTrigger.update)
     ScrollTrigger.addEventListener('refresh', asscroll.resize)
 
-    asscroll.enable()
+    enableAsscroll(asscroll)
+
     setIsReady(true)
 
     return () => {
       gsap.ticker.remove(asscroll.update)
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
     }
   }, [])
+
+  /* Setup parallax */
+  useEffect(() => {
+    if (!isReady) return
+
+    const totalScroll =
+      state.current.scroll.containerElement.scrollHeight - viewport.height
+    const parallaxElements = document.querySelectorAll('[data-speed]')
+
+    const tweens = []
+
+    parallaxElements.forEach((elm) => {
+      tweens.push(htmlParallax(totalScroll, elm))
+    })
+
+    return () => {
+      tweens.forEach((tween) => tween.kill())
+    }
+  }, [isReady, viewport.height])
 
   let last = 0
 

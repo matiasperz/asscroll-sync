@@ -93,6 +93,14 @@ body:not(.user-is-tabbing) textarea:focus {
   font-weight: bold;
 }
 
+.parallax {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: green;
+  color: white;
+}
+
 .canvas-wrapper {
   position: fixed;
   z-index: -1;
