@@ -5,8 +5,8 @@ const CALL_THRESHOLD_MS = 500
 export const useViewportSize = () => {
   const resizeTimeout = useRef<NodeJS.Timeout | null>(null)
   const [windowSize, setWindowSize] = useState<{
-    width: number | undefined
-    height: number | undefined
+    width: number
+    height: number
   }>({
     width: 0,
     height: 0

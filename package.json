@@ -25,13 +25,13 @@
     "mousetrap": "1.6.5",
     "next": "12.1.0",
     "next-seo": "5.1.0",
-    "react": "17.0.2",
+    "react": "^18.0.0-rc.2-next-b9de50d2f-20220308",
     "react-device-detect": "2.1.2",
-    "react-dom": "17.0.2",
+    "react-dom": "^18.0.0-rc.2-next-b9de50d2f-20220308",
     "react-merge-refs": "1.1.0",
     "react-use-measure": "^2.1.1",
     "three": "0.138.3",
-    "tunnel-rat": "^0.0.2"
+    "zustand": "^3.7.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.1.0",

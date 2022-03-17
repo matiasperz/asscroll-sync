@@ -1,4 +1,7 @@
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
+
+import { useAppContext } from '~/context/app'
 
 const Canvas = dynamic(
   //@ts-ignore
@@ -11,13 +14,27 @@ import { Container, ContainerProps } from './container'
 type Props = {
   children?: React.ReactNode
   contain?: boolean | ContainerProps
-
-  // TODO after implementing header, footer
-  // headerProps?: HeaderProps
-  // footerProps?: FooterProps
 }
 
 export const PageLayout = ({ children, contain }: Props) => {
+  const { setFontsLoaded } = useAppContext()
+
+  useEffect(() => {
+    try {
+      document.fonts.ready
+        .then(() => {
+          setFontsLoaded()
+        })
+        .catch((error: unknown) => {
+          console.error(error)
+          setFontsLoaded()
+        })
+    } catch (error) {
+      console.error(error)
+      setFontsLoaded()
+    }
+  }, [setFontsLoaded])
+
   return (
     <>
       {/* TODO Header */}

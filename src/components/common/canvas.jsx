@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import Stats from 'three/examples/jsm/libs/stats.module'
 
+import { useAppContext } from '~/context/app'
 import { useViewportSize } from '~/hooks/use-viewport'
 
 import { context as ASScrollContext } from './asscroll-context'
@@ -17,6 +18,7 @@ const calcCameraFov = () =>
 export const Canvas = () => {
   const ContextBridge = useContextBridge(ASScrollContext)
   const { width, height } = useViewportSize()
+  const { setCanvasLoaded } = useAppContext()
   const camera = useRef(null)
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export const Canvas = () => {
           document.body.appendChild(stats.dom)
 
           camera.current = state.camera
+          setCanvasLoaded(true)
 
           gsap.ticker.add(() => {
             state.gl.render(state.scene, state.camera)

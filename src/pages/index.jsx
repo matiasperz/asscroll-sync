@@ -1,12 +1,20 @@
 import clsx from 'clsx'
 import { useASScroll } from 'components/common/asscroll-context'
 import { WebGL } from 'components/common/webgl'
+import WebGLShadow from 'components/common/webgl-shadow'
 import gsap from 'gsap'
 import { useDeviceDetect } from 'hooks/use-device-detect'
 import { useGsapFrame } from 'hooks/use-gsap-frame'
 import { useViewportSize } from 'hooks/use-viewport'
 import { range } from 'lib/utils'
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  Fragment,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 
 import { Meta } from '~/components/common/meta'
 import { PageLayout } from '~/components/layout/page'
@@ -119,11 +127,14 @@ const HomePage = () => {
     <PageLayout>
       <Meta />
 
+      {/* WebGL tunnel Rat 🐀 */}
       <WebGL>
-        {/* WebGL tunnel Rat 🐀 */}
-        {range(11).map((key) => (
-          <ThreeSquare idx={key} key={key} />
-        ))}
+        {range(12).map((key) => {
+          if (key === 10) {
+            return <Fragment key={key} />
+          }
+          return <ThreeSquare idx={key} key={key} />
+        })}
       </WebGL>
 
       {/* Just simple HTML */}
@@ -141,9 +152,37 @@ const HomePage = () => {
       <div className="square parallax" data-speed="0.1">
         Parallax
       </div>
-      {range(2).map((key) => (
-        <HTMLSquare key={key} />
-      ))}
+      <HTMLSquare />
+
+      <WebGLShadow
+        className="square"
+        style={{
+          background: 'transparent',
+          marginLeft: '55vw',
+          marginTop: '20px',
+          marginBottom: '20px',
+          color: 'white',
+          fontSize: '2vw',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2%'
+        }}
+        shadowChildren={
+          <p style={{ textAlign: 'center' }}>
+            Oh, this? Just WebGL with an HTML shadow element. Impresive, right?
+            (It still a bit buggy, I don't wanna lie lol)
+          </p>
+        }
+        visible
+      >
+        <mesh>
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial color="blue" />
+        </mesh>
+      </WebGLShadow>
+
+      <HTMLSquare />
     </PageLayout>
   )
 }
