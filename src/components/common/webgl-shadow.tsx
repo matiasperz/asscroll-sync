@@ -3,7 +3,6 @@ import React, { FC, HTMLProps, ReactChild, useEffect, useRef } from 'react'
 
 import { useAppContext } from '~/context/app'
 
-//import { useViewportSize } from '~/hooks/use-viewport'
 import { WebGL } from './webgl'
 
 type WebGLShadowProps = {
@@ -26,7 +25,6 @@ const WebGLShadow: FC<WebGLShadowProps> = ({
   const meshRef = useRef<MeshProps>(null)
   const shadowRef = useRef<HTMLDivElement>(null)
   const { canvasLoaded } = useAppContext()
-  //const viewport = useViewportSize()
 
   useEffect(() => {
     if (!canvasLoaded || !shadowRef.current) return
@@ -34,15 +32,12 @@ const WebGLShadow: FC<WebGLShadowProps> = ({
     const handleResize = () => {
       if (!shadowRef.current || !meshRef.current) return
 
-      const { width, height, left, top } =
-        shadowRef.current.getBoundingClientRect()
-
-      //console.log({ width, height, left, top })
+      const { width, height, left } = shadowRef.current.getBoundingClientRect()
+      const { offsetTop } = shadowRef.current
 
       meshRef.current.position.x = -window.innerWidth / 2 + left + width / 2
-      meshRef.current.position.y = window.innerHeight / 2 - top - height / 2
-
-      //console.log([meshRef.current.position.x, meshRef.current.position.y])
+      meshRef.current.position.y =
+        window.innerHeight / 2 - offsetTop - height / 2
 
       meshRef.current.scale.x = width
       meshRef.current.scale.y = height
