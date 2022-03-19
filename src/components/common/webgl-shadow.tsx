@@ -5,15 +5,15 @@ import { useAppContext } from '~/context/app'
 
 import { WebGL } from './webgl'
 
-type WebGLShadowProps = {
-  visible: boolean
-  shadowChildren: ReactChild
-} & HTMLProps<HTMLDivElement>
-
 /* WARNING: This sets the WebGL child size with the scale property, so make
             sure your children elements have a dimension of 1 on the
             horizontal axes. Otherwise the target size will be wrong.
 */
+
+type WebGLShadowProps = {
+  visible: boolean
+  shadowChildren: ReactChild
+} & HTMLProps<HTMLDivElement>
 
 const WebGLShadow: FC<WebGLShadowProps> = ({
   shadowChildren,
