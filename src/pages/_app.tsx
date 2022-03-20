@@ -1,10 +1,13 @@
 import '~/css/global.css'
 
+import {
+  gsapScrollTriggerPlugin,
+  ScrollProvider
+} from '@basement.studio/definitive-scroll'
 import { NextComponentType, NextPageContext } from 'next'
 import { AppProps } from 'next/app'
 import * as React from 'react'
 
-import { ASSCrollProvider } from '~/components/common/asscroll-context'
 import Inspect from '~/components/common/inspect'
 import { AppContextProvider } from '~/context/app'
 import { useMousetrap } from '~/hooks/use-mousetrap'
@@ -66,11 +69,14 @@ const App = ({ Component, pageProps, ...rest }: AppProps) => {
     <>
       {gaTrackingId && <GAScripts />}
       <Inspect>
-        <ASSCrollProvider>
+        <ScrollProvider
+          plugins={[gsapScrollTriggerPlugin]}
+          config={{ damping: 20 }}
+        >
           <AppContextProvider>
             {getLayout({ Component, pageProps, ...rest })}
           </AppContextProvider>
-        </ASSCrollProvider>
+        </ScrollProvider>
       </Inspect>
     </>
   )

@@ -1,5 +1,5 @@
+import { useASScroll } from '@basement.studio/definitive-scroll'
 import clsx from 'clsx'
-import { useASScroll } from 'components/common/asscroll-context'
 import { WebGL } from 'components/common/webgl'
 import WebGLShadow from 'components/common/webgl-shadow'
 import gsap from 'gsap'
@@ -20,7 +20,7 @@ import { Meta } from '~/components/common/meta'
 import { PageLayout } from '~/components/layout/page'
 
 export const ThreeSquare = memo(({ idx }) => {
-  const [asscroll] = useASScroll()
+  const { scroll } = useASScroll()
   const viewport = useViewportSize()
   const meshRef = useRef(null)
 
@@ -35,7 +35,7 @@ export const ThreeSquare = memo(({ idx }) => {
   }, [viewport.width])
 
   useGsapFrame(() => {
-    const scale = 1 - asscroll.delta * 10
+    const scale = 1 - scroll.delta * 10
     meshRef.current.scale.set(scale, scale, 1)
   })
 
@@ -56,14 +56,14 @@ export const ThreeSquare = memo(({ idx }) => {
 
 const HTMLSquare = () => {
   const ref = useRef(null)
-  const [asscroll, isReady] = useASScroll()
+  const { scroll, isReady } = useASScroll()
 
   useEffect(() => {
     if (!isReady || !ref.current) return
 
     gsap.ticker.add(() => {
       gsap.set(ref.current, {
-        scale: 1 - asscroll.delta * 10
+        scale: 1 - scroll.delta * 10
       })
     })
   }, [isReady])
@@ -89,11 +89,10 @@ const Spacer = () => {
 const Trigger = () => {
   const { isDesktop } = useDeviceDetect()
   const overpageRef = useRef(null)
-  const [, isReady] = useASScroll()
+  const { isReady } = useASScroll()
 
   useEffect(() => {
     if (!overpageRef.current || !isReady || isDesktop === undefined) return
-
     const tween = gsap.to(overpageRef.current, {
       scrollTrigger: {
         trigger: overpageRef.current.parentElement,

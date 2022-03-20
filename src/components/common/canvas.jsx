@@ -1,3 +1,4 @@
+import { ScrollContext } from '@basement.studio/definitive-scroll'
 import { useContextBridge } from '@react-three/drei'
 import { Canvas as R3FCanvas } from '@react-three/fiber'
 import gsap from 'gsap'
@@ -7,7 +8,6 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { useAppContext } from '~/context/app'
 import { useViewportSize } from '~/hooks/use-viewport'
 
-import { context as ASScrollContext } from './asscroll-context'
 import Scroll from './scroll'
 import { WebGLOut } from './webgl'
 
@@ -16,7 +16,7 @@ const calcCameraFov = () =>
   (180 * (2 * Math.atan(window.innerHeight / 2 / CAMERA_DISTANCE))) / Math.PI
 
 export const Canvas = () => {
-  const ContextBridge = useContextBridge(ASScrollContext)
+  const ContextBridge = useContextBridge(ScrollContext)
   const { width, height } = useViewportSize()
   const { setCanvasLoaded } = useAppContext()
   const camera = useRef(null)
