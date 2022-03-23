@@ -27,7 +27,7 @@ const WebGLShadow: FC<WebGLShadowProps> = ({
   const { canvasLoaded } = useAppContext()
 
   useEffect(() => {
-    if (!canvasLoaded || !shadowRef.current) return
+    if (!shadowRef.current) return
 
     const handleResize = () => {
       if (!shadowRef.current || !meshRef.current) return

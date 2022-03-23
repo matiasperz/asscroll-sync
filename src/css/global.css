@@ -102,6 +102,10 @@ body:not(.user-is-tabbing) textarea:focus {
   color: white;
 }
 
+.parallax.horizontal {
+  max-height: 100px;
+}
+
 .canvas-wrapper {
   position: fixed;
   z-index: -1;

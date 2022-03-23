@@ -1,4 +1,4 @@
-import { useASScroll } from '@basement.studio/definitive-scroll'
+import { useASScroll } from '@basementstudio/definitive-scroll'
 import React, { useRef } from 'react'
 
 import { useGsapFrame } from '../../hooks/use-gsap-frame'

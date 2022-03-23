@@ -9,6 +9,13 @@
   dependencies:
     "@unseenco/e" "^1.8.2"
 
+"@ashthornton/asscroll@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@ashthornton/asscroll/-/asscroll-2.0.5.tgz#7f28aaf900278f6f8b391b4eb06a72b1ab8d7879"
+  integrity sha512-gTw8yS5l2FBTyplvsi/PVD3ONlbqMCQ2ELc2PB1OULBXx1j+6rsPSsfaTzPU0ap+lfL944j0JIK1njD5fLRC0Q==
+  dependencies:
+    "@unseenco/e" "^1.8.2"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -90,6 +97,15 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
+"@basementstudio/definitive-scroll@^0.0.10":
+  version "0.0.10"
+  resolved "https://npm.pkg.github.com/download/@basementstudio/definitive-scroll/0.0.10/29540bd016450edffd1573ac9ae58520946e1996aa4c730bd63d9cc17e94c91d#fe0e23901410ff0fdb27dda48b0f16f9c1120ad1"
+  integrity sha512-AE8NxzR8WkLnU3rOER6I9pSuIm/Y1DdgRWB94rbHVap6HgDFTtcbhMqAbf6yJ8195BKl67HUJD8SkuRbK48LTg==
+  dependencies:
+    "@ashthornton/asscroll" "^2.0.5"
+    "@juggle/resize-observer" "^3.3.1"
+    zustand "^3.7.1"
+
 "@chevrotain/cst-dts-gen@^10.1.2":
   version "10.1.2"
   resolved "https://registry.yarnpkg.com/@chevrotain/cst-dts-gen/-/cst-dts-gen-10.1.2.tgz#4ee6eff237bb47f4990cfb76c18ee2e71237929c"
@@ -150,6 +166,11 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
+
+"@juggle/resize-observer@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
+  integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
 "@next/bundle-analyzer@12.1.0":
   version "12.1.0"

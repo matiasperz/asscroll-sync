@@ -1,10 +1,13 @@
-import { useASScroll } from '@basement.studio/definitive-scroll'
+import { useASScroll } from '@basementstudio/definitive-scroll'
+import {
+  useGsapFrame,
+  useIntersect
+} from '@basementstudio/definitive-scroll/hooks'
+import { WebGL, WebGLShadow } from '@basementstudio/definitive-scroll/three'
+import { Box } from '@react-three/drei'
 import clsx from 'clsx'
-import { WebGL } from 'components/common/webgl'
-import WebGLShadow from 'components/common/webgl-shadow'
 import gsap from 'gsap'
 import { useDeviceDetect } from 'hooks/use-device-detect'
-import { useGsapFrame } from 'hooks/use-gsap-frame'
 import { useViewportSize } from 'hooks/use-viewport'
 import { range } from 'lib/utils'
 import React, {
@@ -17,6 +20,7 @@ import React, {
 } from 'react'
 
 import { Meta } from '~/components/common/meta'
+import { AspectBox } from '~/components/layout/aspect-box'
 import { PageLayout } from '~/components/layout/page'
 
 export const ThreeSquare = memo(({ idx }) => {
@@ -56,17 +60,15 @@ export const ThreeSquare = memo(({ idx }) => {
 
 const HTMLSquare = () => {
   const ref = useRef(null)
-  const { scroll, isReady } = useASScroll()
+  const { scroll } = useASScroll()
 
-  useEffect(() => {
-    if (!isReady || !ref.current) return
+  useGsapFrame(() => {
+    if (!ref.current) return
 
-    gsap.ticker.add(() => {
-      gsap.set(ref.current, {
-        scale: 1 - scroll.delta * 10
-      })
+    gsap.set(ref.current, {
+      scale: 1 - scroll.delta * 10
     })
-  }, [isReady])
+  })
 
   return <div className="square" ref={ref} />
 }
@@ -121,6 +123,19 @@ const Trigger = () => {
   )
 }
 
+const InviewPlane = () => {
+  const inViewRef = useIntersect((visible) =>
+    console.log('Violet square is visible!', visible)
+  )
+
+  return (
+    <mesh ref={inViewRef}>
+      <planeGeometry args={[1, 1]} />
+      <meshBasicMaterial color="purple" />
+    </mesh>
+  )
+}
+
 const HomePage = () => {
   return (
     <PageLayout>
@@ -128,7 +143,7 @@ const HomePage = () => {
 
       {/* WebGL tunnel Rat 🐀 */}
       <WebGL>
-        {range(12).map((key) => {
+        {range(11).map((key) => {
           if (key === 10) {
             return <Fragment key={key} />
           }
@@ -149,7 +164,34 @@ const HomePage = () => {
         <HTMLSquare key={key} />
       ))}
       <div className="square parallax" data-speed="0.1">
-        Parallax
+        Parallax Vertical
+      </div>
+      <HTMLSquare />
+
+      <div style={{ width: '30%', margin: '0 auto', padding: '80px 0' }}>
+        <WebGLShadow shadowChildren={<AspectBox ratio={1} />} visible>
+          <Box
+            position={[0, 0, -100]}
+            scale={[1, 1, 200]}
+            onClick={(event) => {
+              event.eventObject.material.color.set('blue')
+            }}
+            onPointerOver={(event) => {
+              event.eventObject.material.color.set('green')
+            }}
+            onPointerLeave={(event) => {
+              event.eventObject.material.color.set('white')
+            }}
+          />
+        </WebGLShadow>
+      </div>
+
+      <div
+        className="square parallax horizontal"
+        data-speed="-0.1"
+        data-direction="horizontal"
+      >
+        Parallax Horizontal
       </div>
       <HTMLSquare />
 
@@ -180,6 +222,18 @@ const HomePage = () => {
           <meshBasicMaterial color="blue" />
         </mesh>
       </WebGLShadow>
+
+      {/* <div style={{ width: '100%', padding: '0 40px', margin: '20px 0' }}>
+        <WebGLShadow shadowChildren={<AspectBox ratio={1800 / 945} />} visible>
+          {(ref) => <Image scale={[1800, 945, 1]} url="/og.png" ref={ref} />}
+        </WebGLShadow>
+      </div> */}
+
+      <div style={{ width: '30%', margin: '0 auto', padding: '80px 0' }}>
+        <WebGLShadow shadowChildren={<AspectBox ratio={1} />} visible>
+          <InviewPlane />
+        </WebGLShadow>
+      </div>
 
       <HTMLSquare />
     </PageLayout>

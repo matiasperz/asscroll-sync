@@ -1,9 +1,7 @@
 import '~/css/global.css'
 
-import {
-  gsapScrollTriggerPlugin,
-  ScrollProvider
-} from '@basement.studio/definitive-scroll'
+import { ScrollProvider } from '@basementstudio/definitive-scroll'
+import { gsapScrollTriggerPlugin } from '@basementstudio/definitive-scroll/plugins'
 import { NextComponentType, NextPageContext } from 'next'
 import { AppProps } from 'next/app'
 import * as React from 'react'

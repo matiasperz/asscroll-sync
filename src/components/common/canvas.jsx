@@ -1,4 +1,4 @@
-import { ScrollContext } from '@basement.studio/definitive-scroll'
+import { ScrollContext } from '@basementstudio/definitive-scroll'
 import { useContextBridge } from '@react-three/drei'
 import { Canvas as R3FCanvas } from '@react-three/fiber'
 import gsap from 'gsap'

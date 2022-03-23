@@ -1,13 +1,15 @@
+import type { Canvas as TCanvas } from '@basementstudio/definitive-scroll/three'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 
-import { useAppContext } from '~/context/app'
+import { AppContext, useAppContext } from '~/context/app'
 
 const Canvas = dynamic(
   //@ts-ignore
-  () => import('../common/canvas').then((mod) => mod.Canvas),
+  () =>
+    import('@basementstudio/definitive-scroll/three').then((mod) => mod.Canvas),
   { ssr: false }
-)
+) as typeof TCanvas
 
 import { Container, ContainerProps } from './container'
 
@@ -17,7 +19,7 @@ type Props = {
 }
 
 export const PageLayout = ({ children, contain }: Props) => {
-  const { setFontsLoaded } = useAppContext()
+  const { setFontsLoaded, setCanvasLoaded } = useAppContext()
 
   useEffect(() => {
     try {
@@ -39,7 +41,7 @@ export const PageLayout = ({ children, contain }: Props) => {
     <>
       {/* TODO Header */}
       {/* <Header /> */}
-      <Canvas />
+      <Canvas onCreated={setCanvasLoaded} forwardContext={[AppContext]} debug />
       <div style={{ position: 'relative' }}>
         <div asscroll-container="true">
           <div>
